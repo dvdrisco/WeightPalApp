@@ -1,0 +1,38 @@
+# This file specifies your Python application's runtime configuration.
+# See https://cloud.google.com/appengine/docs/managed-vms/config for details.
+
+runtime: python311
+env: standard
+entrypoint: gunicorn -b :$PORT -c gunicorn.conf.py main:app
+
+handlers:
+  - url: /.*
+    script: auto
+    secure: always
+    redirect_http_response_code: 301
+
+# TODO -> UPDATE
+
+#[START env]
+env_variables:
+  DB_STRING: >-
+    postgresql+psycopg2://postgres:Iqopaogh23!@/postgres?host=/cloudsql/my-weight-pal-374215:us-central1:myweightpaldb
+  # for testing service
+  DEPLOYMENT_ENV: production
+#[END env]
+
+#[START cloudsql_settings]
+beta_settings:
+  cloud_sql_instances: my-weight-pal-374215:us-central1:myweightpaldb
+
+# This sample incurs costs to run on the App Engine flexible environment.
+# The settings below are to reduce costs during testing and are not appropriate
+# for production use. For more information, see:
+# https://cloud.google.com/appengine/docs/flexible/python/configuring-your-app-with-app-yaml
+basic_scaling:
+  max_instances: 25
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
+#[END cloudsql_settings]

@@ -1,0 +1,10 @@
+# TODO Update
+
+dispatch:
+  # Test service serves all test subdomain requests.
+  - url: "test.myweightpal.dev/*"
+    service: test
+
+  # Default service serves the typical web resources and all static resources.
+  - url: "myweightpal.dev/*"
+    service: default

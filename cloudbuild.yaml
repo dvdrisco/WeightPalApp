@@ -1,0 +1,26 @@
+steps:
+  - name: "gcr.io/cloud-builders/npm"
+    args: ["i"]
+    dir: "frontend-react-app"
+  - name: "gcr.io/cloud-builders/npm"
+    entrypoint: "bash"
+    args: ["./npm_run_eject.sh"]
+    dir: "frontend-react-app"
+  - name: "ubuntu"
+    entrypoint: "bash"
+    args: ["./update_react_config.sh"]
+    dir: "frontend-react-app"
+  - name: "gcr.io/cloud-builders/npm"
+    args: ["run", "build"]
+    dir: "frontend-react-app"
+  - name: "bash"
+    args: ["rm", "-r", "node_modules"]
+    dir: "frontend-react-app"
+
+  # push to test service only
+  # - name: "gcr.io/cloud-builders/gcloud"
+  #   args: ["app", "deploy", "dispatch.yaml", "test.yaml"]
+
+  # push to test service and production service
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ["app", "deploy", "app.yaml"]
